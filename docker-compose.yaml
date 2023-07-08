@@ -1,0 +1,32 @@
+version: '3'
+
+services:
+  api-foodsquare:
+    build: .
+    entrypoint: sh ./.docker/entrypoint.sh
+    container_name: api-foodsquare
+    ports:
+      - 3020:3020
+    volumes:
+      - ./:/home/app/api-foodsquare
+    tty: true
+    networks:
+      - foodsquare-network
+
+  db:
+    image: mongo:4.4
+    container_name: mongodb
+    ports:
+      - 27017:27017
+    volumes:
+      - /mongodb/dbdata:/data/db
+      - /mongodb/configdb:/data/configdb
+      - ./mongo-init.js:/docker-entrypoint-initdb.d/mongo-init.js
+    environment:
+      MONGO_INITDB_DATABASE: $MONGO_DB_CONNECT_URL
+    networks:
+      - foodsquare-network
+
+networks:
+  foodsquare-network:
+    driver: bridge
