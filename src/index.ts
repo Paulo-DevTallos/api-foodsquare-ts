@@ -8,7 +8,7 @@ import { dbConnection } from './database';
 
 const app = express();
 config();
-const server = http.createServer(app)
+export const server = http.createServer(app)
 export const io = new Server(server)
 
 //mongo db conection - stabelishing connection api when database is up
@@ -28,9 +28,3 @@ app.use((req, res, next) => {
 app.use('/uploads', express.static(path.resolve(__dirname, '..', 'uploads')))
 app.use(express.json())
 app.use(router);
-
-const port = process.env.PORT || 3020;
-
-server.listen(port, () => {
-	console.log(`Server is running on port http://localhost:${port}`)
-})
